@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Keycloak Test</title>
+    <script src="https://unpkg.com/keycloak-js@22.0.5/dist/keycloak.min.js"></script>
+</head>
+<body>
+    <h1>Keycloak Connection Test</h1>
+    <div id="status">Testing...</div>
+    <button onclick="testLogin()" disabled id="loginBtn">Login</button>
+    
+    <script>
+        console.log('🔍 Starting Keycloak test...');
+        
+        const keycloak = new Keycloak({
+            url: 'http://localhost:9090',
+            realm: 'ecommerce',
+            clientId: 'frontend-app'
+        });
+        
+        keycloak.init({
+            onLoad: 'check-sso',
+            pkceMethod: 'S256',
+            checkLoginIframe: false,
+            enableLogging: true
+        }).then(function(authenticated) {
+            console.log('✅ Keycloak initialized successfully!', { authenticated });
+            document.getElementById('status').innerHTML = 
+                '✅ Keycloak connected! Authenticated: ' + authenticated;
+            document.getElementById('loginBtn').disabled = false;
+        }).catch(function(error) {
+            console.error('❌ Keycloak initialization failed:', error);
+            document.getElementById('status').innerHTML = 
+                '❌ Keycloak connection failed: ' + error.message;
+        });
+        
+        function testLogin() {
+            keycloak.login();
+        }
+    </script>
+</body>
+</html> 
