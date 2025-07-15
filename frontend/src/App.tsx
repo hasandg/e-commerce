@@ -23,17 +23,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />     
-
-      {/* Not authenticated message */}
-      {!token && (
-        <Container maxWidth="xl" sx={{ mt: 2 }}>
-          <Alert severity="info">
-            Please login to access your account information.
-          </Alert>
-        </Container>
-      )}
-
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>

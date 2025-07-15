@@ -31,13 +31,12 @@ import {
   ListAlt as OrdersIcon,
 } from '@mui/icons-material';
 import { AuthContext } from 'react-oauth2-code-pkce';
-import { authConfig } from '../../config/authConfig';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const { token, tokenData, logIn, logOut, loginInProgress } = useContext(AuthContext);
+  const { token, tokenData, idToken, logIn, logOut, loginInProgress } = useContext(AuthContext);
   
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,13 +57,17 @@ const Header: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Clear local tokens first
-    logOut();
     handleMenuClose();
     
-    // Redirect to Keycloak logout endpoint to terminate the session
-    const logoutUrl = `${authConfig.logoutEndpoint}?post_logout_redirect_uri=${encodeURIComponent(window.location.origin)}`;
-    window.location.href = logoutUrl;
+    // Use the library's built-in logout with proper parameters
+    // The library should handle the id_token_hint automatically
+    logOut(
+      undefined, // state parameter
+      idToken,   // logoutHint parameter (this is the id_token_hint)
+      {
+        post_logout_redirect_uri: window.location.origin
+      }
+    );
   };
 
   const handleLogin = () => {

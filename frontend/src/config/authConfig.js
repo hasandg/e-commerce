@@ -6,4 +6,5 @@ export const authConfig = {
     redirectUri: 'http://localhost:3000',
     scopes: 'openid profile email offline_access',
     logoutEndpoint: 'http://localhost:9090/realms/ecommerce/protocol/openid-connect/logout',
+    autoLogin: false, // Prevent automatic redirect to login page
 };
